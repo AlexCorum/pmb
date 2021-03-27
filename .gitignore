@@ -1,3 +1,5 @@
 /docker/php7/conf/db_param.inc.php
 /docker/php7/conf/opac_db_param.inc.php
+/docker/php7/forge/
 /docker/.env
+/archives/

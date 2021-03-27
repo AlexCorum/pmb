@@ -11,9 +11,6 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-if nc -z proxy.in.ac-grenoble.fr 8080; then
-  pear config-set http_proxy http://proxy.in.ac-grenoble.fr:8080
-fi
 pecl install "$@"
 
 while [ $# -gt 0 ]; do
