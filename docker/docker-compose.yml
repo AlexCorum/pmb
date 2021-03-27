@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: pmbdb
+    ports:
+      - ${MYSQL_PORT}:3306
+    volumes:
+      - ./.data/db:/var/lib/mysql
+      - ./php7/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${CONTAINER_TIMEZONE}
+    restart: always
+
+  php:
+    build:
+      context: php7
+      args:
+        PMB_VERSION: ${PMB_VERSION}
+    container_name: pmbphp
+    volumes:
+      - ../doc_num:/var/www/pmb/doc_num
+      - ../docscdi:/var/www/pmb/docscdi
+#      - ../docscdi_zen:/var/www/pmb/docscdi_zen
+      - ../.img_cache:/var/www/pmb/img_cache
+    ports:
+      - ${APACHE_PORT}:80
+    environment:
+      TZ: ${CONTAINER_TIMEZONE}
+    restart: always
+
+#  phpmyadmin:
+#    image: phpmyadmin/phpmyadmin
+#    container_name: pmbphpmyadmin
+#    environment:
+#      - PMA_ARBITRARY=1
+#    restart: always
+#    ports:
+#      - ${PHPMYADMIN_PORT}:80
+#    volumes:
+#      - /sessions
