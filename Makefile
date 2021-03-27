@@ -12,6 +12,7 @@ env:
 	@echo VPS : $(VPS)
 	@echo DATE : $(DATE)
 	@echo KIMSUFI_SERVER : $(KIMSUFI_SERVER)
+	@echo OTHERVPS_SERVER : $(OTHERVPS_SERVER)
 	@echo ARCHIVE_PATH : $(ARCHIVE_PATH)
 	@echo ARCHIVE_FILES : $(ARCHIVE_FILES)
 	@echo ARCHVIE_SQL : $(ARCHIVE_SQL)
@@ -21,11 +22,12 @@ www:
 	chown pmb:pmb $(ARCHIVE_FILES)
 
 sql:
-	@docker exec pmbdb mysqldump --max_allowed_packet=1G -h db -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE) | bzip2 > $(ARCHIVE_SQL)
+	@docker exec pmbdb mysqldump --max_allowed_packet=1G --no-tablespaces -h db -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE) | bzip2 > $(ARCHIVE_SQL)
 	chown pmb:pmb $(ARCHIVE_SQL)
 
 ssh: www sql	 ## Automatic backup 3 folders and database and copy to Kimsufi
 	scp $(ARCHIVE_FILES) $(ARCHIVE_SQL) pmb@$(KIMSUFI_SERVER):$(ARCHIVE_PATH)/
+	scp $(ARCHIVE_FILES) $(ARCHIVE_SQL) pmb@$(OTHERVPS_SERVER):$(ARCHIVE_PATH)/
 
 backup:			 ## Manual database backup. By default : NAME=$(DATEHOUR). Example : make backup NAME=RANDOM
 	@echo Database exportation in progress : $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
