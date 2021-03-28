@@ -104,17 +104,17 @@ RUN docker-php-pecl-install \
         apcu
 
 # xdebug
-RUN apt-get update \
-    && apt-get install -y \
-        iproute2 \
-    && docker-php-pecl-install \
-        xdebug \
-    && echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so" >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_enable=1" >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
-    # host.docker.internal does not work on Linux yet: https://github.com/docker/for-linux/issues/264
-    # Workaround:
-    && ip -4 route list match 0/0 | awk '{print $3 " host.docker.internal"}' >> /etc/hosts \
-    && echo "xdebug.remote_host=host.docker.internal" >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini
+#RUN apt-get update \
+#    && apt-get install -y \
+#        iproute2 \
+#    && docker-php-pecl-install \
+#        xdebug \
+#    && echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20180731/xdebug.so" >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
+#    && echo "xdebug.remote_enable=1" >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
+#    # host.docker.internal does not work on Linux yet: https://github.com/docker/for-linux/issues/264
+#    # Workaround:
+#    && ip -4 route list match 0/0 | awk '{print $3 " host.docker.internal"}' >> /etc/hosts \
+#    && echo "xdebug.remote_host=host.docker.internal" >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini
 
 # PHP.INI
 COPY php.ini $PHP_INI_DIR/conf.d/docker-php.ini
@@ -151,6 +151,6 @@ COPY conf/curl.class.php ${APACHE_DOCUMENT_ROOT}/opac_css/classes/curl.class.php
 # RUN chown www-data:www-data ${APACHE_DOCUMENT_ROOT}/opac_css/admin/connecteurs/in/wikipedia/wikipedia.class.php
 RUN chown www-data:www-data ${APACHE_DOCUMENT_ROOT}/opac_css/classes/curl.class.php
 
-RUN ip -4 route list match 0/0 | awk '{print $3 " host.docker.internal"}' >> /etc/hosts
+#RUN ip -4 route list match 0/0 | awk '{print $3 " host.docker.internal"}' >> /etc/hosts
 
 WORKDIR ${APACHE_DOCUMENT_ROOT}

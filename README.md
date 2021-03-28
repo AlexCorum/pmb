@@ -108,6 +108,8 @@ Run docker
 ```shell
 docker network create web
 cd ~/docker
+touch acme.json
+chmod 600 acme.json
 make rebuild
 ```
 
