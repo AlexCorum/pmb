@@ -94,7 +94,19 @@ http://vps-XXXXXXXX.vps.ovh.net/tables/install.php
 
 
 ## Running docker
+Change domain in docker/traefik.toml
+
 ```shell
+vi ~/docker/traefik.toml
+
+[docker]
+domain = "cdi.ovh"
+```
+
+Run docker
+
+```shell
+docker network create web
 cd ~/docker
 make rebuild
 ```
