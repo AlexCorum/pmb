@@ -11,8 +11,7 @@ env:
 	@echo SITE : $(SITE)
 	@echo VPS : $(VPS)
 	@echo DATE : $(DATE)
-	@echo KIMSUFI_SERVER : $(KIMSUFI_SERVER)
-	@echo OTHERVPS_SERVER : $(OTHERVPS_SERVER)
+	@echo BACKUP_SERVER : $(BACKUP_SERVER)
 	@echo ARCHIVE_PATH : $(ARCHIVE_PATH)
 	@echo ARCHIVE_FILES : $(ARCHIVE_FILES)
 	@echo ARCHVIE_SQL : $(ARCHIVE_SQL)
@@ -26,8 +25,9 @@ sql:
 	chown pmb:pmb $(ARCHIVE_SQL)
 
 ssh: www sql	 ## Automatic backup 3 folders and database and copy to Kimsufi
-	scp $(ARCHIVE_FILES) $(ARCHIVE_SQL) pmb@$(KIMSUFI_SERVER):$(ARCHIVE_PATH)/
-	scp $(ARCHIVE_FILES) $(ARCHIVE_SQL) pmb@$(OTHERVPS_SERVER):$(ARCHIVE_PATH)/
+	@for server in $(subst :, ,$(BACKUP_SERVER)); do \
+  		scp $(ARCHIVE_FILES) $(ARCHIVE_SQL) $$server:$(ARCHIVE_PATH)/; \
+	done
 
 backup:			 ## Manual database backup. By default : NAME=$(DATEHOUR). Example : make backup NAME=RANDOM
 	@echo Database exportation in progress : $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
