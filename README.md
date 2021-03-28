@@ -1,6 +1,7 @@
 # PMB
 PMB application with docker
-Backup on a KIMSUFI server
+Custom correction for specific PMB version
+Automatic backup on a different server
 
 PMB 7.3.2
 PHP 7.3
@@ -25,6 +26,7 @@ apt update
 apt upgrade
 apt autoremove
 ```
+
 
 ## Disable ssh root connexion
 ```shell
@@ -60,7 +62,7 @@ rm -rf pmb_sources
 ```
 
 
-## Add params
+## Add and update params
 ```shell
 cp docker/.env.dist docker/.env
 cp docker/php7/conf/db_param.inc.php.dist docker/php7/conf/db_param.inc.php
@@ -76,6 +78,19 @@ Download file
 ```shell
 scp pmb7.3.2.zip pmb@vps-XXXXXXXX.vps.ovh.net:docker/php7/forge/.
 ```
+
+
+## First installation  pmb
+Disable the following lines in Dockerfile
+```dockerfile
+RUN mv ${APACHE_DOCUMENT_ROOT}/tables/install.php ${APACHE_DOCUMENT_ROOT}/tables/noinstall.php
+RUN mv ${APACHE_DOCUMENT_ROOT}/tables/install_rep.php ${APACHE_DOCUMENT_ROOT}/tables/noinstall_rep.php
+```
+and open
+```
+http://vps-XXXXXXXX.vps.ovh.net/tables/install.php
+```
+
 
 ## Running docker
 ```shell
