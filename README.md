@@ -22,6 +22,7 @@ passwd
 
 ## Update server
 ```shell
+timedatectl set-timezone Europe/Paris
 apt update
 apt upgrade
 apt autoremove
