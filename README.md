@@ -82,7 +82,7 @@ scp pmb7.3.2.zip pmb@vps-XXXXXXXX.vps.ovh.net:docker/php7/forge/.
 
 
 ## First installation  pmb
-Disable the following lines in Dockerfile
+Disable the following lines in docker/php7/Dockerfile (or add comment)
 ```dockerfile
 RUN mv ${APACHE_DOCUMENT_ROOT}/tables/install.php ${APACHE_DOCUMENT_ROOT}/tables/noinstall.php
 RUN mv ${APACHE_DOCUMENT_ROOT}/tables/install_rep.php ${APACHE_DOCUMENT_ROOT}/tables/noinstall_rep.php

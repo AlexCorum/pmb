@@ -33,7 +33,7 @@ backup:			 ## Manual database backup. By default : NAME=$(DATEHOUR). Example : m
 	@echo Database exportation in progress : $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
 	@docker exec pmbdb mysqldump --max_allowed_packet=1G -h db -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE) | bzip2 > $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
 
-restore:		## Manual database restauration. By default : NAME=$(DATEHOUR). Example : make restore NAME=RANDOM
+restore:		## Manual database restoration. By default : NAME=$(DATEHOUR). Example : make restore NAME=RANDOM
 	@echo Database restauration in progress : $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
 	@bunzip2 < $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2 | docker exec -i pmbdb mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)
 
