@@ -131,26 +131,16 @@ ssh-copy-id -i ~/.ssh/id_rsa pmb@KIMSUFI-SERVER
 ssh pmb@KIMSUFI-SERVER
 ```
 
-From root
-```shell
-sudo -i
-ssh-keygen
-ssh-copy-id -i ~/.ssh/id_rsa pmb@KIMSUFI-SERVER
-ssh pmb@KIMSUFI-SERVER
-```
-
 Create backup-pmb script
 ```shell
-sudo -i
-vi /etc/cron.daily/backup-pmb
+sudo vi /etc/cron.daily/backup-pmb
 ```
 
 ```
 #!/bin/sh
 # cron script for backup-pmb
-cd /home/pmb
-make ssh
-find archives/* -mtime +15 -exec rm {} \;
+runuser -u pmb -- make -C /home/pmb ssh
+runuser -u pmb -- find /home/pmb/archives/* -mtime +15 -exec rm {} \;
 ```
 
 ```shell

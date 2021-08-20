@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 ARG PMB_VERSION
 
@@ -42,7 +42,7 @@ RUN apt-get update \
         libjpeg62-turbo-dev \
         libpng-dev \
         libgd-dev \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install \
         gd \
         exif
@@ -74,10 +74,17 @@ RUN docker-php-ext-install \
         sockets
 
 # Yaz
-RUN apt-get update \
-    && apt-get install -y \
-        libyaz4-dev \
-    && docker-php-pecl-install \
+#RUN apt-get update \
+#    && apt-get install -y \
+#        libyaz-dev
+RUN cd /usr/src \
+   && wget https://ftp.indexdata.com/pub/yaz/yaz-5.31.0.tar.gz \
+   && tar -xzf yaz-5.31.0.tar.gz \
+   && cd yaz-5.31.0 \
+   && ./configure \
+   && make \
+   && make install
+RUN docker-php-pecl-install \
         yaz
 
 # Imagick
