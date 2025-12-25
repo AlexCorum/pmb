@@ -6,7 +6,7 @@ Automatic backup on a different server
 PMB 7.3.2
 PHP 7.3
 Apache 2.4.38
-MySQL 5.7
+MariaDB
 
 
 ## Installation
@@ -94,10 +94,11 @@ http://vps-XXXXXXXX.vps.ovh.net/tables/install.php
 
 
 ## Running docker
-Change domain in docker/traefik.toml
+Change domain in docker/traefik.yml
 
 ```shell
-vi ~/docker/traefik.toml
+cp ~/docker/traefik.yml.dist ~/docker/traefik.yml
+vi ~/docker/traefik.yml
 
 [docker]
 domain = "cdi.ovh"

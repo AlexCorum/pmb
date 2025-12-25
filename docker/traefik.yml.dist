@@ -1,0 +1,35 @@
+api:
+  dashboard: false # Optional can be disabled
+  insecure: false # Optional can be disabled
+  debug: false # Optional can be Enabled if needed for troubleshooting
+entryPoints:
+  web:
+    address: ":80"
+    # Optional if you want to redirect all HTTP to HTTPS
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+    http:
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: --
+            sans:
+              - "*.--"
+serversTransport:
+  insecureSkipVerify: true
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: --
+      storage: acme.json
+      httpChallenge:
+        entryPoint: web
