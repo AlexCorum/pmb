@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.4-apache
 
 ARG PMB_VERSION
 
@@ -9,17 +9,17 @@ COPY bin/* /usr/local/bin/
 RUN chmod -R 755 /usr/local/bin/
 
 # Common
-RUN apt-get update \
-    && apt-get install -y \
+RUN apt update \
+    && apt install -y \
         wget \
         unzip \
         poppler-utils \
         vim \
-        netcat
+        netcat-traditional
 
 # intl
-RUN apt-get update \
-    && apt-get install -y \
+RUN apt update \
+    && apt install -y \
         libicu-dev \
     && docker-php-ext-configure \
         intl \
@@ -27,17 +27,18 @@ RUN apt-get update \
         intl
 
 # xml
-RUN apt-get update \
-    && apt-get install -y \
-        libxml2-dev \
-        libxslt-dev \
-    && docker-php-ext-install \
-        xmlrpc \
-        xsl
+#@TODO
+#RUN apt update \
+#    && apt install -y \
+#        libxml2-dev \
+#        libxslt-dev \
+#    && docker-php-ext-install \
+#       xmlrpc \
+#       xsl
 
 # images
-RUN apt-get update \
-    && apt-get install -y \
+RUN apt update \
+    && apt install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -59,8 +60,8 @@ RUN docker-php-ext-install \
 #    gettext \
 
 # compression
-RUN apt-get update \
-    && apt-get install -y \
+RUN apt update \
+    && apt install -y \
         libzip-dev\
         libbz2-dev \
         zlib1g-dev \
@@ -69,18 +70,19 @@ RUN apt-get update \
         bz2
 
 # others
-RUN docker-php-ext-install \
-        soap \
-        sockets
+#@TODO
+#RUN docker-php-ext-install \
+#        soap \
+#        sockets
 
 # Yaz
-#RUN apt-get update \
-#    && apt-get install -y \
-#        libyaz-dev
+RUN apt update \
+    && apt install -y \
+        libyaz-dev
 RUN cd /usr/src \
-   && wget https://ftp.indexdata.com/pub/yaz/yaz-5.31.0.tar.gz \
-   && tar -xzf yaz-5.31.0.tar.gz \
-   && cd yaz-5.31.0 \
+   && wget https://ftp.indexdata.com/pub/yaz/yaz-5.35.1.tar.gz \
+   && tar -xzf yaz-5.35.1.tar.gz \
+   && cd yaz-5.35.1 \
    && ./configure \
    && make \
    && make install
@@ -88,31 +90,33 @@ RUN docker-php-pecl-install \
         yaz
 
 # Imagick
-RUN apt-get update \
-    && apt-get install -y \
-        libmagickwand-dev \
-    && docker-php-pecl-install \
-        imagick
+#@TODO
+RUN #apt update \
+#    && apt install -y \
+#        libmagickwand-dev \
+#    && docker-php-pecl-install \
+#        imagick
 
 # Xdiff
-RUN cd /usr/src \
-   && wget http://www.xmailserver.org/libxdiff-0.22.tar.gz \
-   && tar -xzf libxdiff-0.22.tar.gz \
-   && cd libxdiff-0.22 \
-   && ./configure \
-   && make \
-   && make install
-
-RUN docker-php-pecl-install \
-        xdiff
+#RUN cd /usr/src \
+#   && wget http://www.xmailserver.org/libxdiff-0.23.tar.gz \
+#   && tar -xzf libxdiff-0.23.tar.gz \
+#   && cd libxdiff-0.23 \
+#   && ./configure \
+#   && make \
+#   && make install
+#
+##@TODO
+#RUN docker-php-pecl-install \
+#        xdiff
 
 # apcu
 RUN docker-php-pecl-install \
         apcu
 
 # xdebug
-#RUN apt-get update \
-#    && apt-get install -y \
+#RUN apt update \
+#    && apt install -y \
 #        iproute2 \
 #    && docker-php-pecl-install \
 #        xdebug \
@@ -149,14 +153,14 @@ RUN mv ${APACHE_DOCUMENT_ROOT}/tables/install.php ${APACHE_DOCUMENT_ROOT}/tables
 RUN mv ${APACHE_DOCUMENT_ROOT}/tables/install_rep.php ${APACHE_DOCUMENT_ROOT}/tables/noinstall_rep.php
 
 # change configuration
-RUN sed -i '1394d' ${APACHE_DOCUMENT_ROOT}/opac_css/styles/zen/zzen_responsive.css
-RUN sed -i s/'content: attr(data)'/'content: attr(class)'/ ${APACHE_DOCUMENT_ROOT}/opac_css/styles/zen/base.css
+#RUN sed -i '1394d' ${APACHE_DOCUMENT_ROOT}/opac_css/styles/zen/zzen_responsive.css
+#RUN sed -i s/'content: attr(data)'/'content: attr(class)'/ ${APACHE_DOCUMENT_ROOT}/opac_css/styles/zen/base.css
 
 # COPY conf/wikipedia.class.php ${APACHE_DOCUMENT_ROOT}/opac_css/admin/connecteurs/in/wikipedia/wikipedia.class.php
-COPY conf/curl.class.php ${APACHE_DOCUMENT_ROOT}/opac_css/classes/curl.class.php
+#COPY conf/curl.class.php ${APACHE_DOCUMENT_ROOT}/opac_css/classes/curl.class.php
 
 # RUN chown www-data:www-data ${APACHE_DOCUMENT_ROOT}/opac_css/admin/connecteurs/in/wikipedia/wikipedia.class.php
-RUN chown www-data:www-data ${APACHE_DOCUMENT_ROOT}/opac_css/classes/curl.class.php
+#RUN chown www-data:www-data ${APACHE_DOCUMENT_ROOT}/opac_css/classes/curl.class.php
 
 #RUN ip -4 route list match 0/0 | awk '{print $3 " host.docker.internal"}' >> /etc/hosts
 

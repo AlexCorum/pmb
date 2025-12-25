@@ -3,9 +3,9 @@ PMB application with docker
 Custom correction for specific PMB version
 Automatic backup on a different server
 
-PMB 7.3.2
-PHP 7.3
-Apache 2.4.38
+PMB 8.0.1.23
+PHP 8.4
+Apache 2.4.65
 MariaDB
 
 

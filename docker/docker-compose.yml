@@ -32,7 +32,7 @@ services:
 
   php:
     build:
-      context: php7
+      context: php8
       args:
         PMB_VERSION: ${PMB_VERSION}
     container_name: pmbphp
