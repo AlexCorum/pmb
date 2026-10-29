@@ -37,3 +37,6 @@ logs:				## Show logs
 
 bash:				## Run bash
 	-$(DC_EXEC) bash
+
+inspect:                                ## Show Containers IPs
+	docker inspect -f '{{.Name}} - {{range .NetworkSettings.Networks}} {{.IPAddress}} {{end}} ' pmbdb

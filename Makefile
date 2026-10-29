@@ -21,7 +21,7 @@ www:
 	chown pmb:pmb $(ARCHIVE_FILES)
 
 sql:
-	@docker exec pmbdb mysqldump --max_allowed_packet=1G --no-tablespaces -h db -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE) | bzip2 > $(ARCHIVE_SQL)
+	@docker exec pmbdb mariadb-dump --max_allowed_packet=1G --no-tablespaces -h db -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE) | bzip2 > $(ARCHIVE_SQL)
 	chown pmb:pmb $(ARCHIVE_SQL)
 
 ssh: www sql	 ## Automatic backup 3 folders and database and copy to Kimsufi
@@ -31,7 +31,7 @@ ssh: www sql	 ## Automatic backup 3 folders and database and copy to Kimsufi
 
 backup:			 ## Manual database backup. By default : NAME=$(DATEHOUR). Example : make backup NAME=RANDOM
 	@echo Database exportation in progress : $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
-	@docker exec pmbdb mysqldump --max_allowed_packet=1G -h db -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE) | bzip2 > $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
+	@docker exec pmbdb mariadb-dump --max_allowed_packet=1G -h db -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE) | bzip2 > $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
 
 restore:		## Manual database restoration. By default : NAME=$(DATEHOUR). Example : make restore NAME=RANDOM
 	@echo Database restauration in progress : $(ARCHIVE_PATH)/$(NAME)-mysql-manual.sql.bz2
