@@ -27,14 +27,11 @@ RUN apt update \
         intl
 
 # xml
-#@TODO
-#RUN apt update \
-#    && apt install -y \
-#        libxml2-dev \
-#        libxslt-dev \
-#    && docker-php-ext-install \
-#       xmlrpc \
-#       xsl
+RUN apt update \
+    && apt install -y \
+        libxslt1-dev \
+    && docker-php-ext-install \
+       xsl
 
 # images
 RUN apt update \
@@ -69,11 +66,13 @@ RUN apt update \
         zip \
         bz2
 
+RUN docker-php-ext-install \
+        ftp
+
 # others
-#@TODO
-#RUN docker-php-ext-install \
-#        soap \
-#        sockets
+RUN docker-php-ext-install \
+        soap \
+        sockets
 
 # Yaz
 RUN apt update \
@@ -90,25 +89,23 @@ RUN docker-php-pecl-install \
         yaz
 
 # Imagick
-#@TODO
-RUN #apt update \
-#    && apt install -y \
-#        libmagickwand-dev \
-#    && docker-php-pecl-install \
-#        imagick
+RUN apt update \
+    && apt install -y \
+        libmagickwand-dev \
+    && docker-php-pecl-install \
+        imagick
 
 # Xdiff
-#RUN cd /usr/src \
-#   && wget http://www.xmailserver.org/libxdiff-0.23.tar.gz \
-#   && tar -xzf libxdiff-0.23.tar.gz \
-#   && cd libxdiff-0.23 \
-#   && ./configure \
-#   && make \
-#   && make install
-#
-##@TODO
-#RUN docker-php-pecl-install \
-#        xdiff
+RUN cd /usr/src \
+   && wget http://www.xmailserver.org/libxdiff-0.23.tar.gz \
+   && tar -xzf libxdiff-0.23.tar.gz \
+   && cd libxdiff-0.23 \
+   && ./configure \
+   && make \
+   && make install
+
+RUN docker-php-pecl-install \
+        xdiff
 
 # apcu
 RUN docker-php-pecl-install \
@@ -129,6 +126,7 @@ RUN docker-php-pecl-install \
 
 # PHP.INI
 COPY php.ini $PHP_INI_DIR/conf.d/docker-php.ini
+#COPY conf/xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
 
 # APACHE
 COPY pmb.conf /etc/apache2/sites-available/pmb.conf
